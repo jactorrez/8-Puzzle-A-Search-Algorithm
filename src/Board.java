@@ -7,6 +7,10 @@ public class Board {
 	private final int inversions;
 	private final int N;
 	private final int boardSize;
+	private Board previous;
+	private int steps = 0;
+	private int hammingDist = -1;
+	private int manhatDist  = -1;
 	
 	// Constructs a board from an N-by-N array of blocks: O(N^2)
 	public Board(int[][] blocks){
@@ -31,6 +35,10 @@ public class Board {
 	
 	// Returns number of blocks out of place: O(N^2)
 	public int hamming(){
+		
+		if(hammingDist != -1)
+			return hammingDist;
+		
 		int amount = 0; 
 		
 		for(int r = 0; r < N; r++){
@@ -45,11 +53,17 @@ public class Board {
 				}
 			}
 		}
+		
+		hammingDist = amount;
 		return amount;
 	}
 	
 	// Returns sum of Manhattan distances between blocks and goal: O(N^2)
 	public int manhattan(){
+		
+		if(manhatDist != -1)
+			return manhatDist; 
+		
 		int sum = 0;
 		
 		for(int i = 0; i < N; i++){
@@ -67,7 +81,7 @@ public class Board {
 				sum += manhatDist;
 			}
 		}
-		
+		manhatDist = sum;
 		return sum;
 	}
 	
@@ -164,6 +178,14 @@ public class Board {
 	}
 	
 	/* --- Utility functions --- */
+	
+	public Board getPrevious(){
+		return previous;
+	}
+	
+	public int getSteps(){
+		return steps;
+	}
 	
 	/**
 	 * Calculates number of inversions present in current board
