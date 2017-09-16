@@ -18,7 +18,7 @@ public class Solver {
 	HeapAdaptablePriorityQueue<Integer, Board> moves = new HeapAdaptablePriorityQueue<>();
 	ProbeHashMap<Board, Integer> closed = new ProbeHashMap<>();	// current distances
 	ProbeHashMap<Board, Integer> open = new ProbeHashMap<>();	// final distances
-	ProbeHashMap<Board, Entry<Integer, Board>> moveLocator = new ProbeHashMap<>();	// keep pointers to moves in PQ
+	ProbeHashMap<Board, Entry<Integer, Board>> moveLocator = new ProbeHashMap<>();	// keep pointers to moves in PQ to update
 	
 	// find a solution to the initial board (using A* search algorithm)
 	public Solver(Board initial){
@@ -33,7 +33,6 @@ public class Solver {
 		moves.insert(initial.getSteps() + initial.hamming(), initial);
 		
 		while(!moves.isEmpty()){
-			
 			Board currentMin = moves.removeMin().getValue();
 
 			int currentSteps = currentMin.getSteps();
@@ -68,13 +67,12 @@ public class Solver {
 						moveLocator.put(neighbor, moves.insert(cost, neighbor));
 						open.put(neighbor, cost);
 					}
-
 				}
 			}
 		}
 	}
 	
-	// Min number of moves to solve initial board
+	// Minimum number of moves to solve initial board
 	public int moves(){
 		return optimalSteps;
 	}

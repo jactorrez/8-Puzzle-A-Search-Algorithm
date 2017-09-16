@@ -290,17 +290,10 @@ public class Board{
 		int[][] test = {{8,1,3},
 						  {4,0,2},
 						  {7,6,5}};	
-
-		int[][] weirdBoard = {{1,0,3},
-				  		      {4,5,2},
-				  		      {8,7,6}};
-
 		
 		Board testBoard = new Board(test);
-		Board testBoard2 = new Board(weirdBoard);
 		
 		System.out.println("Testing board...");
-		System.out.println(testBoard2.inversions());
-		
+		System.out.println(testBoard.inversions());
 	}
 }
