@@ -44,14 +44,11 @@ public class Board{
 		for(int r = 0; r < N; r++){
 			for(int c = 0; c < N; c++){
 				int val = board[r][c];
-				System.out.println("Current value: " + val);
 				if(val == 0){
 					continue;
 				}
 				int goalRow = (val-1) / N;
 				int goalCol = (val-1) % N;
-				System.out.println("Current row/Goal row: " + r + "/" + goalRow);
-				System.out.println("Current col/Goal col: " + c + "/" + goalCol);
 				if(r != goalRow || c != goalCol){
 					amount++;
 				}
@@ -294,16 +291,16 @@ public class Board{
 						  {4,0,2},
 						  {7,6,5}};	
 
-		int[][] weirdBoard = {{0,1,3},
-				  		      {4,2,5},
-				  		      {7,8,6}};
+		int[][] weirdBoard = {{1,0,3},
+				  		      {4,5,2},
+				  		      {8,7,6}};
 
 		
 		Board testBoard = new Board(test);
 		Board testBoard2 = new Board(weirdBoard);
 		
 		System.out.println("Testing board...");
-		System.out.println(testBoard2.hamming());
+		System.out.println(testBoard2.inversions());
 		
 	}
 }
