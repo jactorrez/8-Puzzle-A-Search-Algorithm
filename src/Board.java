@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class Board {
+public class Board{
 	
 	public int[][] board;
 	private int[] blankPosition = new int[2];
@@ -43,12 +43,16 @@ public class Board {
 		
 		for(int r = 0; r < N; r++){
 			for(int c = 0; c < N; c++){
-			
-				if((c == N-1) && (r != N-1)){
-					if((board[r+1][0] != 0) && board[r][c] > board[r+1][0]){
-						amount++;
-					}
-				} else if((c <= N-2 && board[r][c+1] != 0) && board[r][c] > board[r][c+1]){
+				int val = board[r][c];
+				System.out.println("Current value: " + val);
+				if(val == 0){
+					continue;
+				}
+				int goalRow = (val-1) / N;
+				int goalCol = (val-1) % N;
+				System.out.println("Current row/Goal row: " + r + "/" + goalRow);
+				System.out.println("Current col/Goal col: " + c + "/" + goalCol);
+				if(r != goalRow || c != goalCol){
 					amount++;
 				}
 			}
@@ -113,6 +117,9 @@ public class Board {
 	
 	// Checks if this board equals board y: O(N^2)
 	public boolean equals(Board y){
+		if(y == null)
+			return false;
+		
 		int[][] other = y.board;
 		int otherBoardSize = y.boardSize;
 		boolean isEqual = true;
@@ -179,12 +186,37 @@ public class Board {
 	
 	/* --- Utility functions --- */
 	
+	// Returns the Board used to get to this one
 	public Board getPrevious(){
 		return previous;
 	}
 	
+	// Sets the Board used to get to this one
+	public void setPrevious(Board prev){
+		this.previous = prev;
+	}
+	
+	// Returns the amount of steps (moves) made to get to this board
 	public int getSteps(){
 		return steps;
+	}
+	
+	// Sets the amount of steps (moves) made to get to this board
+	public void setSteps(int steps){
+		this.steps = steps;
+	}
+	
+	/**
+	 * Calculates hash code for the current board
+	 */
+	public int hashCode(){
+		int hash = 17; // nonzero prime constant
+		hash = 31 * hash + ((Integer) hamming()).hashCode();
+		hash = 31 * hash + ((Integer) manhattan()).hashCode();
+		hash = 31 * hash + ((Integer) blankPosition[0]).hashCode();
+		hash = 31 * hash + ((Integer) blankPosition[1]).hashCode();
+		return hash;
+		
 	}
 	
 	/**
@@ -193,23 +225,8 @@ public class Board {
 	 * @return number of inversions
 	 */
 	private int inversions(){
-		int amount = 0; 
 		
-		for(int r = 0; r < N; r++){
-			for(int c = 0; c < N; c++){
-			
-				if((c == N-1) && (r != N-1)){
-					if((board[r+1][0] != 0) && board[r][c] > board[r+1][0]){
-						amount++;
-					}
-				} else if((c <= N-2 && board[r][c+1] != 0) && board[r][c] > board[r][c+1]){
-					amount++;
-				}
-			}
-			
-		}
-		
-		return amount;
+		return hamming();
 	}
 	
 	/**
@@ -273,26 +290,20 @@ public class Board {
 	
 	// Unit tests 
 	public static void main(String[] args){
-		int[][] test = {{1,3,4},
-						  {8,0,7},
-						  {5,6,2}};
+		int[][] test = {{8,1,3},
+						  {4,0,2},
+						  {7,6,5}};	
 
-		int[][] goal = {{1,2,3},
-				  		    {4,5,6},
-				  		    {7,8,0}};
+		int[][] weirdBoard = {{0,1,3},
+				  		      {4,2,5},
+				  		      {7,8,6}};
 
 		
 		Board testBoard = new Board(test);
-		Board testGoal = new Board(goal);
+		Board testBoard2 = new Board(weirdBoard);
 		
-		System.out.println("Current board...");
-		System.out.println(testBoard);
+		System.out.println("Testing board...");
+		System.out.println(testBoard2.hamming());
 		
-		System.out.println("Neighbors...");
-		Iterable<Board> neighbors = testBoard.neighbors();
-		
-		for(Board b : neighbors){
-			System.out.println(b);
-		}
 	}
 }
